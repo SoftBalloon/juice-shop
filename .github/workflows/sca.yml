@@ -1,0 +1,21 @@
+name: SCA
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'  # runs daily at midnight
+
+jobs:
+  trivy:
+    name: Trivy SCA Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
