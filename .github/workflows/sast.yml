@@ -1,0 +1,23 @@
+name: SAST
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'  # runs daily at midnight
+
+jobs:
+  semgrep:
+    name: Semgrep SAST Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >
+            p/javascript
+            p/nodejs
+            p/owasp-top-ten
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
